@@ -1,0 +1,6 @@
+{
+  "name": "Kit Recomeço",
+  "description": "Landing page mobile-first de alta conversão: quiz rápido de 30 segundos, diagnóstico personalizado e oferta exclusiva do Kit Recomeço.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
