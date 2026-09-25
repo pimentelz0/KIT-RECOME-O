@@ -9,7 +9,8 @@ import {
   CheckSquare, 
   ChevronDown,
   BookOpen,
-  Zap
+  Zap,
+  CreditCard
 } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 import { KitCoverShowcase } from './components/KitCoverShowcase';
@@ -236,7 +237,7 @@ export default function App() {
       
       {/* Top Value Banner: dá vida, credibilidade e elimina a sensação de vazio no topo */}
       <div className="w-full bg-[#0B343F] text-[#F3ECDF] text-[11px] sm:text-xs py-1.5 px-4 border-b border-[#0B343F]/20 flex items-center justify-center gap-2 sm:gap-3 text-center font-medium">
-        <span>Método Prático em 3 Passos · Acesso Imediato no seu E-mail · <strong>Apenas R$ 9,90</strong></span>
+        <span>Método Prático em 3 Passos · Acesso Imediato Após a Compra · <strong>Apenas R$ 9,90</strong></span>
       </div>
 
       {/* Header Sticky Enriquecido e Equilibrado */}
@@ -647,6 +648,22 @@ export default function App() {
                 <span>Quero meu Kit Recomeço agora</span>
                 <ArrowRight className="w-5 h-5 shrink-0" />
               </a>
+
+              {/* Linha horizontal com ícones genéricos de Pix e Cartão de Crédito */}
+              <div className="flex items-center justify-center gap-3.5 text-[#0B343F] text-xs font-semibold pt-1">
+                <div className="flex items-center gap-1.5">
+                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2.5L3.5 11l8.5 8.5 8.5-8.5L12 2.5z"/>
+                    <path d="M12 7.5L7.5 12l4.5 4.5 4.5-4.5L12 7.5z"/>
+                  </svg>
+                  <span>Pix</span>
+                </div>
+                <span className="text-[#0B343F]/30 select-none" aria-hidden="true">·</span>
+                <div className="flex items-center gap-1.5">
+                  <CreditCard className="w-4 h-4 shrink-0" />
+                  <span>Cartão de Crédito</span>
+                </div>
+              </div>
 
               {/* Selo de Confiança */}
               <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-medium text-[#0B343F]/85 text-center px-2 py-1">
