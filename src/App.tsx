@@ -11,6 +11,7 @@ import {
   BookOpen,
   Zap
 } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 import { KitCoverShowcase } from './components/KitCoverShowcase';
 
 interface Question {
@@ -667,6 +668,7 @@ export default function App() {
         </footer>
 
       </main>
+      <Analytics />
     </div>
   );
 }
