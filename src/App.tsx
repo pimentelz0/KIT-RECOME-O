@@ -3,14 +3,12 @@ import {
   ArrowRight, 
   CheckCircle2, 
   Lock, 
-  Clock, 
   Sparkles, 
-  TrendingUp, 
-  CheckSquare, 
-  ChevronDown,
-  BookOpen,
-  Zap,
-  CreditCard
+  BookOpen, 
+  CreditCard,
+  Check,
+  Compass,
+  Zap
 } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 import { KitCoverShowcase } from './components/KitCoverShowcase';
@@ -51,52 +49,49 @@ const QUESTIONS: Question[] = [
   },
 ];
 
-// 3 itens principais que compõem o Kit Recomeço
-const OFFER_ITEMS = [
+const METHOD_STEPS = [
   {
-    num: 1,
-    title: 'Como Sair do Fundo do Poço',
-    desc: 'O passo a passo que usei pra recomeçar do zero.',
-    icon: TrendingUp,
-    isBonus: false,
+    step: '01',
+    name: 'SAIR DA INÉRCIA',
+    desc: 'Comece a recuperar sua rotina mesmo quando você não está com vontade ou motivação.',
+    material: 'Como Sair do Fundo do Poço',
   },
   {
-    num: 2,
-    title: 'Como Perceber Que Você Está Evoluindo',
-    desc: 'Como reconhecer o seu progresso, mesmo quando a balança e o espelho ainda não mostram.',
-    icon: Sparkles,
-    isBonus: false,
+    step: '02',
+    name: 'PERCEBER SUA EVOLUÇÃO',
+    desc: 'Aprenda a reconhecer pequenos sinais de progresso enquanto você continua avançando.',
+    material: 'Como Perceber Que Você Está Evoluindo',
   },
   {
-    num: 3,
-    title: 'Checklist de 21 Dias',
-    desc: 'Um passo por dia para recomeçar, sem pressão e sem complicação.',
-    icon: CheckSquare,
-    isBonus: false,
+    step: '03',
+    name: 'CONSTRUIR CONSTÂNCIA',
+    desc: 'Use 21 dias de pequenas ações para começar a transformar intenção em rotina.',
+    material: 'Checklist de 21 Dias',
   },
+];
+
+const TARGET_AUDIENCE = [
+  'Está se sentindo travado',
+  'Perdeu a rotina',
+  'Está passando por uma fase de mudança',
+  'Quer voltar a cuidar de si',
+  'Precisa de um ponto de partida',
 ];
 
 const CHECKOUT_URL = 'https://pay.kiwify.com.br/N6TEoxs';
 
 export default function App() {
-  const [currentStep, setCurrentStep] = useState<number>(0); // 0 = not started, 1, 2, 3 = quiz questions, 4 = analyzing, 5 = completed
+  const [currentStep, setCurrentStep] = useState<number>(0); // 0 = initial, 1-3 = questions, 4 = analyzing, 5 = result
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [selectedInStep, setSelectedInStep] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
-  // 24-hour countdown timer
-  const [timeLeft, setTimeLeft] = useState<{ hours: number; minutes: number; seconds: number }>({
-    hours: 23,
-    minutes: 59,
-    seconds: 59,
-  });
-
-  const heroRef = useRef<HTMLDivElement>(null);
   const quizRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+  const methodRef = useRef<HTMLDivElement>(null);
   const offerRef = useRef<HTMLDivElement>(null);
 
-  // Scroll detection for sticky header shadow elevation
+  // Scroll detection for sticky header elevation
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 15);
@@ -107,98 +102,45 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Initialize or resume countdown timer with 24 hours persistence
-  useEffect(() => {
-    const STORAGE_KEY = 'kit_recomeco_countdown_target';
-    const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
-
-    const getStoredTarget = (): number => {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          const target = parseInt(stored, 10);
-          if (!isNaN(target) && target > Date.now()) {
-            return target;
-          }
-        }
-      } catch {
-        // Ignore localStorage error
-      }
-      const newTarget = Date.now() + TWENTY_FOUR_HOURS_MS;
-      try {
-        localStorage.setItem(STORAGE_KEY, newTarget.toString());
-      } catch {
-        // Ignore localStorage error
-      }
-      return newTarget;
-    };
-
-    let targetTime = getStoredTarget();
-
-    const interval = setInterval(() => {
-      const now = Date.now();
-      let diff = targetTime - now;
-
-      if (diff <= 0) {
-        // Reset timer as requested ("reinicia ao expirar")
-        targetTime = Date.now() + TWENTY_FOUR_HOURS_MS;
-        try {
-          localStorage.setItem(STORAGE_KEY, targetTime.toString());
-        } catch {
-          // Ignore
-        }
-        diff = TWENTY_FOUR_HOURS_MS;
-      }
-
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-
-      setTimeLeft({ hours, minutes, seconds });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const handleStartQuiz = () => {
     setCurrentStep(1);
     setTimeout(() => {
       quizRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 80);
+    }, 60);
   };
 
   const handleOptionSelect = (questionId: number, option: string) => {
     setSelectedInStep(option);
     setAnswers((prev) => ({ ...prev, [questionId]: option }));
 
-    // Quiz advances automatically without separate "next" button
     setTimeout(() => {
       setSelectedInStep(null);
       if (questionId < 3) {
         setCurrentStep(questionId + 1);
       } else {
-        // Step 3 answered: show quick diagnostic pulse and display result
-        setCurrentStep(4); // analyzing
+        // Step 3 answered: quick calculation pulse
+        setCurrentStep(4);
         setTimeout(() => {
-          setCurrentStep(5); // finished quiz
+          setCurrentStep(5);
           setTimeout(() => {
             resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }, 120);
-        }, 750);
+        }, 700);
       }
-    }, 280);
+    }, 260);
+  };
+
+  const scrollToMethod = () => {
+    methodRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const scrollToOffer = () => {
     offerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const pad = (n: number) => n.toString().padStart(2, '0');
-
   const questionIndex = Math.min(Math.max(currentStep - 1, 0), 2);
   const activeQuestion = QUESTIONS[questionIndex];
-  
-  // Sincronização exata: 0% = barra vazia; perguntas 1, 2 e 3 = 33%, 66%, 100%
+
   const getProgressPercent = (step: number) => {
     switch (step) {
       case 0:
@@ -216,7 +158,7 @@ export default function App() {
   };
   const progressPercent = getProgressPercent(currentStep);
 
-  // Parágrafo dinâmico do resultado com base na Pergunta 3
+  // Dynamic diagnostic text based on question 3
   const getDiagnosticDynamicText = () => {
     const answer3 = answers[3];
     if (answer3 === 'Falta de tempo') {
@@ -235,129 +177,132 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#F3ECDF] text-[#0B343F] font-sans antialiased selection:bg-[#E18B42] selection:text-white flex flex-col">
       
-      {/* Top Value Banner: dá vida, credibilidade e elimina a sensação de vazio no topo */}
-      <div className="w-full bg-[#0B343F] text-[#F3ECDF] text-[11px] sm:text-xs py-1.5 px-4 border-b border-[#0B343F]/20 flex items-center justify-center gap-2 sm:gap-3 text-center font-medium">
+      {/* Top Value Banner */}
+      <div className="w-full bg-[#0B343F] text-[#F3ECDF] text-[11px] sm:text-xs py-1.5 px-4 border-b border-[#0B343F]/20 flex items-center justify-center gap-2 text-center font-medium">
         <span>Método Prático em 3 Passos · Acesso Imediato Após a Compra · <strong>Apenas R$ 9,90</strong></span>
       </div>
 
-      {/* Header Sticky Enriquecido e Equilibrado */}
+      {/* Header Sticky */}
       <header 
-        className={`w-full sticky top-0 z-50 bg-[#F3ECDF]/95 backdrop-blur-md transition-all duration-200 py-2.5 sm:py-3.5 px-4 sm:px-6 lg:px-8 ${
+        className={`w-full sticky top-0 z-50 bg-[#F3ECDF]/95 backdrop-blur-md transition-all duration-200 py-2.5 sm:py-3 px-4 sm:px-6 lg:px-8 ${
           isScrolled 
-            ? 'shadow-[0_4px_24px_rgba(11,52,63,0.10)] border-b border-[#0B343F]/12' 
+            ? 'shadow-[0_4px_24px_rgba(11,52,63,0.08)] border-b border-[#0B343F]/12' 
             : 'border-b border-[#0B343F]/8'
         }`}
       >
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
-          {/* Brand Logo Lockup: ícone refinado + tipografia de peso limpa sem pingos */}
-          <div className="flex items-center gap-2.5 sm:gap-3 group select-none">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#0B343F] text-[#E18B42] flex items-center justify-center shadow-xs border border-white/15 transition-transform group-hover:scale-105">
-              <BookOpen className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#E18B42]" />
+        <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5 select-none">
+            <div className="w-8 h-8 rounded-xl bg-[#0B343F] text-[#E18B42] flex items-center justify-center shadow-xs">
+              <BookOpen className="w-4 h-4 text-[#E18B42]" />
             </div>
             <div className="flex flex-col justify-center">
-              <div className="flex items-center">
-                <span className="font-black text-base sm:text-lg tracking-tight text-[#0B343F] leading-none">
-                  KIT RECOMEÇO
-                </span>
-              </div>
-              <span className="text-[10px] sm:text-[11px] font-semibold text-[#0B343F]/65 hidden xs:inline leading-tight mt-0.5">
-                Método Prático de Transformação
+              <span className="font-black text-base tracking-tight text-[#0B343F] leading-none">
+                KIT RECOMEÇO
+              </span>
+              <span className="text-[10px] font-semibold text-[#0B343F]/65 hidden xs:inline leading-tight mt-0.5">
+                Método Prático de Recomeço
               </span>
             </div>
           </div>
 
-          {/* Botão de Ação Imediata: discreto, curto e elegante */}
-          <div className="flex items-center">
-            <a
-              href={CHECKOUT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#E18B42] hover:bg-[#d07a33] active:scale-95 transition-all duration-150 text-white text-xs font-bold py-1.5 px-3.5 sm:px-4 rounded-xl shadow-xs cursor-pointer no-underline inline-flex items-center justify-center"
-            >
-              Quero o meu
-            </a>
-          </div>
+          <a
+            href={CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#E18B42] hover:bg-[#d07a33] active:scale-95 transition-all text-white text-xs font-bold py-1.5 px-4 rounded-xl shadow-xs cursor-pointer no-underline inline-flex items-center justify-center"
+          >
+            Quero o meu
+          </a>
         </div>
       </header>
 
-      {/* Main Responsive Wrapper */}
-      <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 sm:pt-6 pb-8 sm:pb-12 flex flex-col gap-6 sm:gap-8 md:gap-10 flex-1">
+      {/* Main Content Area */}
+      <main className="w-full max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-10 flex flex-col gap-10 sm:gap-14 flex-1">
         
         {/* ========================================================
-            2. HERO SECTION ENRIQUECIDO
+            1. HERO
             ======================================================== */}
-        <section 
-          ref={heroRef}
-          id="hero"
-          className="w-full bg-gradient-to-b from-[#0B343F] via-[#0B343F] to-[#082831] text-white rounded-3xl p-6 sm:p-10 md:p-12 lg:p-14 shadow-lg border border-[#0B343F] relative overflow-hidden text-center"
-        >
-          {/* Iluminação ambiente com profundidade */}
-          <div className="absolute -top-24 -right-24 w-80 h-80 bg-[#E18B42]/25 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-[#E18B42]/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(ellipse_at_center,rgba(225,139,66,0.06),transparent_70%)] pointer-events-none" />
-          
-          <div className="relative z-10 flex flex-col items-center max-w-2xl mx-auto">
-            {/* Tag de Destaque com efeito dinâmico */}
-            <div className="inline-flex items-center gap-2 mb-4 px-3.5 py-1.5 rounded-full bg-[#E18B42]/20 border border-[#E18B42]/30 text-[#E18B42] text-xs sm:text-sm font-bold tracking-wider uppercase shadow-xs">
-              <Zap className="w-3.5 h-3.5 fill-[#E18B42] text-[#E18B42] animate-pulse" />
-              Diagnóstico Rápido de 30 Segundos
+        <section className="w-full text-center flex flex-col items-center pt-2 sm:pt-4">
+          {/* Badge discreto */}
+          <div className="inline-flex items-center gap-1.5 mb-5 px-3 py-1 rounded-full bg-[#0B343F]/8 border border-[#0B343F]/15 text-[#0B343F] text-xs font-bold tracking-wider uppercase">
+            <span>ACESSO IMEDIATO</span>
+            <span className="text-[#0B343F]/40">•</span>
+            <span className="text-[#E18B42]">R$ 9,90</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0B343F] leading-[1.15] mb-5 tracking-tight uppercase text-balance max-w-2xl">
+            Você não precisa ter a vida resolvida.
+            <br />
+            <span className="text-[#E18B42]">Precisa começar.</span>
+          </h1>
+
+          <p className="text-base sm:text-lg text-[#0B343F]/85 font-normal leading-relaxed mb-8 max-w-xl text-balance">
+            Um método prático para quem está cansado de se sentir travado e quer voltar a colocar a própria rotina nos trilhos.
+          </p>
+
+          <button
+            onClick={handleStartQuiz}
+            type="button"
+            className="w-full sm:w-auto min-w-[280px] bg-[#E18B42] hover:bg-[#d07a33] active:scale-[0.98] transition-all text-white font-black text-base sm:text-lg py-4 px-8 rounded-2xl shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer touch-manipulation group"
+          >
+            <span>COMEÇAR MEU RECOMEÇO</span>
+            <ArrowRight className="w-5 h-5 shrink-0 transition-transform group-hover:translate-x-1" />
+          </button>
+        </section>
+
+        {/* ========================================================
+            2. A HISTÓRIA POR TRÁS
+            ======================================================== */}
+        <section className="w-full bg-[#FAF6F0] border border-[#0B343F]/12 rounded-3xl p-6 sm:p-8 md:p-10 shadow-xs relative overflow-hidden">
+          <div className="flex flex-col gap-3 max-w-xl mx-auto text-left">
+            <span className="text-xs font-bold tracking-wider text-[#E18B42] uppercase">
+              Origem
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-[#0B343F] tracking-tight uppercase">
+              Eu também já estive aqui.
+            </h2>
+            <div className="space-y-3 text-base sm:text-lg text-[#0B343F]/85 leading-relaxed pt-1">
+              <p>
+                Depois de uma fase que mudou completamente minha vida, eu percebi que esperar tudo melhorar não estava me levando a lugar nenhum.
+              </p>
+              <p className="font-bold text-[#0B343F]">
+                Eu precisava começar.
+              </p>
+              <p>
+                Foi daí que nasceu o Recomeço.
+              </p>
             </div>
-
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-black text-white leading-[1.12] mb-4 tracking-tight text-balance">
-              Você tá cansado de se sentir travado?
-            </h1>
-
-            <p className="text-base sm:text-lg md:text-xl text-[#F3ECDF]/90 font-normal leading-relaxed mb-6 sm:mb-8 max-w-xl text-balance">
-              Descubra em 30 segundos o que tá te impedindo de recomeçar.
-            </p>
-
-            {/* 3 Passos com Contraste Marcante e Visual de Guia */}
-            <div className="grid grid-cols-3 gap-2.5 sm:gap-4 mb-7 sm:mb-8 w-full max-w-md sm:max-w-lg">
-              <div className="bg-[#124452]/90 border border-white/20 rounded-2xl p-2.5 sm:p-3.5 text-center shadow-xs">
-                <span className="block text-[10px] sm:text-xs font-bold text-[#E18B42] uppercase tracking-wider mb-0.5">Passo 1</span>
-                <span className="text-xs sm:text-sm font-bold text-white">3 Perguntas</span>
-              </div>
-              <div className="bg-[#124452]/90 border border-white/20 rounded-2xl p-2.5 sm:p-3.5 text-center shadow-xs">
-                <span className="block text-[10px] sm:text-xs font-bold text-[#E18B42] uppercase tracking-wider mb-0.5">Passo 2</span>
-                <span className="text-xs sm:text-sm font-bold text-white">Sem E-mail</span>
-              </div>
-              <div className="bg-[#124452]/90 border border-white/20 rounded-2xl p-2.5 sm:p-3.5 text-center shadow-xs">
-                <span className="block text-[10px] sm:text-xs font-bold text-[#E18B42] uppercase tracking-wider mb-0.5">Passo 3</span>
-                <span className="text-xs sm:text-sm font-bold text-white">Seu Diagnóstico</span>
-              </div>
-            </div>
-
-            <button
-              onClick={handleStartQuiz}
-              type="button"
-              className="w-full sm:w-auto min-w-[260px] sm:min-w-[300px] bg-[#E18B42] hover:bg-[#d07a33] active:scale-[0.98] transition-all duration-200 text-white font-extrabold text-base sm:text-lg py-4 sm:py-4.5 px-8 rounded-2xl shadow-lg hover:shadow-xl flex items-center justify-center gap-3 cursor-pointer touch-manipulation group"
-            >
-              <span>Começar agora</span>
-              <ArrowRight className="w-5 h-5 shrink-0 transition-transform group-hover:translate-x-1" />
-            </button>
-
-            {/* Prova Social Real e Discreta */}
-            <p className="text-xs sm:text-sm text-[#F3ECDF]/80 mt-3 sm:mt-3.5 font-normal tracking-wide">
-              A história que já alcançou mais de 700 mil pessoas no TikTok.
-            </p>
           </div>
         </section>
 
         {/* ========================================================
-            3. QUIZ SECTION (3 perguntas, uma por tela, sem e-mail)
+            3. DIAGNÓSTICO DE 30 SEGUNDOS
             ======================================================== */}
         <section 
-          ref={quizRef}
-          id="quiz" 
-          aria-label="Quiz de Diagnóstico"
-          className="w-full max-w-2xl mx-auto scroll-mt-20"
+          ref={quizRef} 
+          id="diagnostico" 
+          className="w-full scroll-mt-20 flex flex-col gap-4"
         >
           <div className="w-full bg-white border border-[#0B343F]/15 rounded-3xl p-6 sm:p-8 md:p-10 shadow-sm">
-            {/* Header with progress indicator: texto e barra 100% sincronizados */}
-            <div className="mb-6 sm:mb-8">
-              <div className="flex items-center justify-between text-xs sm:text-sm font-bold text-[#0B343F]/70 mb-2">
+            
+            {/* Header do Diagnóstico */}
+            <div className="text-center max-w-xl mx-auto mb-6">
+              <span className="text-xs font-bold tracking-wider text-[#E18B42] uppercase block mb-1">
+                Diagnóstico de 30 Segundos
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-[#0B343F] tracking-tight uppercase mb-2">
+                O que está te impedindo de recomeçar?
+              </h2>
+              <p className="text-sm sm:text-base text-[#0B343F]/75">
+                Responda 3 perguntas rápidas e descubra qual área da sua rotina está pedindo mais atenção agora.
+              </p>
+            </div>
+
+            {/* Barra de Progresso */}
+            <div className="mb-6 max-w-md mx-auto">
+              <div className="flex items-center justify-between text-xs font-bold text-[#0B343F]/70 mb-1.5">
                 <span>
-                  {currentStep === 0 && 'Teste em 3 passos rápidos'}
+                  {currentStep === 0 && '3 perguntas rápidas • sem cadastro'}
                   {currentStep >= 1 && currentStep <= 3 && `Pergunta ${currentStep} de 3`}
                   {currentStep >= 4 && 'Concluído'}
                 </span>
@@ -365,9 +310,7 @@ export default function App() {
                   {progressPercent}%
                 </span>
               </div>
-
-              {/* Progress Bar (0% = largura zero; preenchimento e texto perfeitamente alinhados) */}
-              <div className="w-full h-2.5 bg-[#F3ECDF] rounded-full overflow-hidden">
+              <div className="w-full h-2 bg-[#F3ECDF] rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-[#E18B42] transition-all duration-300 ease-out rounded-full"
                   style={{ width: `${progressPercent}%` }}
@@ -375,33 +318,28 @@ export default function App() {
               </div>
             </div>
 
-            {/* Quiz State: Not yet clicked 'Começar' */}
+            {/* Passo 0: Antes de clicar para iniciar */}
             {currentStep === 0 && (
-              <div className="text-center py-6">
-                <h3 className="text-lg sm:text-xl font-extrabold text-[#0B343F] mb-2">
-                  Pronto para descobrir o que está travando sua rotina?
-                </h3>
-                <p className="text-sm sm:text-base text-[#0B343F]/80 mb-6 font-medium max-w-md mx-auto">
-                  Apenas 3 perguntas diretas. Sem cadastro e sem pedir e-mail.
-                </p>
+              <div className="text-center py-4 flex flex-col items-center">
                 <button
                   onClick={handleStartQuiz}
-                  className="w-full sm:w-auto min-w-[240px] bg-[#0B343F] hover:bg-[#124452] active:scale-[0.98] text-white font-bold py-4 px-8 rounded-2xl transition-all inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                  type="button"
+                  className="w-full sm:w-auto min-w-[260px] bg-[#0B343F] hover:bg-[#124452] active:scale-[0.98] text-white font-bold py-3.5 px-8 rounded-2xl transition-all inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm group"
                 >
-                  <span>Iniciar quiz (30s)</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>DESCOBRIR AGORA</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
               </div>
             )}
 
-            {/* Quiz Questions: 1, 2 or 3 */}
+            {/* Perguntas: 1, 2 ou 3 */}
             {currentStep >= 1 && currentStep <= 3 && (
-              <div className="flex flex-col gap-5 animate-in fade-in duration-200">
-                <h2 className="text-xl sm:text-2xl font-extrabold text-[#0B343F] leading-snug tracking-tight">
+              <div className="flex flex-col gap-4 max-w-md mx-auto animate-in fade-in duration-150">
+                <h3 className="text-lg sm:text-xl font-extrabold text-[#0B343F] leading-snug tracking-tight">
                   {activeQuestion.title}
-                </h2>
+                </h3>
 
-                <div className="flex flex-col gap-3 pt-1">
+                <div className="flex flex-col gap-2.5 pt-1">
                   {activeQuestion.options.map((option, idx) => {
                     const isSelected = selectedInStep === option || answers[activeQuestion.id] === option;
                     return (
@@ -409,282 +347,321 @@ export default function App() {
                         key={idx}
                         type="button"
                         onClick={() => handleOptionSelect(activeQuestion.id, option)}
-                        className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all duration-150 flex items-center justify-between cursor-pointer touch-manipulation active:scale-[0.99] group ${
+                        className={`w-full text-left p-4 rounded-2xl border transition-all duration-150 flex items-center justify-between cursor-pointer touch-manipulation active:scale-[0.99] group ${
                           isSelected
-                            ? 'border-[#E18B42] bg-[#E18B42]/10 text-[#0B343F] font-bold ring-2 ring-[#E18B42]/20 shadow-xs'
+                            ? 'border-[#E18B42] bg-[#E18B42]/10 text-[#0B343F] font-bold ring-2 ring-[#E18B42]/20'
                             : 'border-[#0B343F]/15 bg-[#F3ECDF]/30 hover:border-[#0B343F]/40 hover:bg-[#F3ECDF]/60 text-[#0B343F]'
                         }`}
                       >
-                        <span className="text-sm sm:text-base leading-snug pr-3 font-medium group-hover:text-[#0B343F]">
+                        <span className="text-sm sm:text-base leading-snug pr-3 font-medium">
                           {option}
                         </span>
-                        <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
+                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
                           isSelected ? 'border-[#E18B42] bg-[#E18B42]' : 'border-[#0B343F]/30 group-hover:border-[#0B343F]'
                         }`}>
-                          {isSelected && <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white" />}
+                          {isSelected && <span className="w-2 h-2 rounded-full bg-white" />}
                         </div>
                       </button>
                     );
                   })}
                 </div>
-                <p className="text-xs text-[#0B343F]/50 text-center mt-2">
-                  Clique na opção para avançar automaticamente
+                <p className="text-xs text-[#0B343F]/50 text-center mt-1">
+                  Clique na resposta para avançar automaticamente
                 </p>
               </div>
             )}
 
-            {/* Quiz Analyzing / Step 4 */}
+            {/* Análise rápida */}
             {currentStep === 4 && (
-              <div className="py-10 flex flex-col items-center justify-center text-center gap-3">
-                <div className="w-12 h-12 border-3 border-[#E18B42] border-t-transparent rounded-full animate-spin" />
+              <div className="py-8 flex flex-col items-center justify-center text-center gap-3">
+                <div className="w-10 h-10 border-3 border-[#E18B42] border-t-transparent rounded-full animate-spin" />
                 <p className="text-base font-bold text-[#0B343F]">
-                  Cruzando suas respostas...
-                </p>
-                <p className="text-xs sm:text-sm text-[#0B343F]/60">
-                  Gerando seu diagnóstico em instantes.
+                  Analisando sua rotina...
                 </p>
               </div>
             )}
 
-            {/* Quiz Step 5: Completed indicator */}
+            {/* Resultado do Diagnóstico */}
             {currentStep === 5 && (
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-[#0B343F]/5 border border-[#0B343F]/10">
-                <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-[#0B343F]">
-                  <CheckCircle2 className="w-5 h-5 text-[#E18B42]" />
-                  <span>Respostas analisadas com sucesso</span>
+              <div 
+                ref={resultRef}
+                className="flex flex-col gap-4 p-5 sm:p-6 rounded-2xl bg-[#0B343F] text-white max-w-xl mx-auto animate-in fade-in duration-200"
+              >
+                <div className="flex items-center gap-2 text-xs font-bold text-[#E18B42] uppercase tracking-wider">
+                  <CheckCircle2 className="w-4 h-4 text-[#E18B42]" />
+                  <span>Diagnóstico Concluído</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCurrentStep(1);
-                    setAnswers({});
-                  }}
-                  className="text-xs sm:text-sm text-[#0B343F]/70 hover:text-[#0B343F] font-semibold underline cursor-pointer"
-                >
-                  Refazer quiz
-                </button>
-              </div>
-            )}
-          </div>
-        </section>
 
-        {/* ========================================================
-            4. RESULTADO (Aparece após 3ª resposta ou acessível)
-            ======================================================== */}
-        {(currentStep === 5 || currentStep === 0) && (
-          <section 
-            ref={resultRef}
-            id="resultado"
-            className="w-full max-w-4xl mx-auto bg-[#0B343F] text-white rounded-3xl p-6 sm:p-8 md:p-10 shadow-md border border-[#0B343F] relative overflow-hidden scroll-mt-20"
-          >
-            <div className="flex flex-col gap-4 text-left">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#E18B42]">
-                <Sparkles className="w-4 h-4" />
-                <span>Diagnóstico Concluído</span>
-              </div>
-
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white leading-tight tracking-tight max-w-2xl">
-                Seu diagnóstico: você está pronto pra recomeçar — só falta o método certo.
-              </h2>
-
-              <div className="flex flex-col gap-2 max-w-2xl">
-                {dynamicDiagnosis && (
+                {dynamicDiagnosis ? (
                   <p className="text-base sm:text-lg font-bold text-[#E18B42] leading-snug">
                     {dynamicDiagnosis}
                   </p>
+                ) : (
+                  <p className="text-base sm:text-lg font-bold text-[#E18B42] leading-snug">
+                    Você está pronto pra recomeçar — só falta o método certo.
+                  </p>
                 )}
-                <p className="text-sm sm:text-base md:text-lg text-[#F3ECDF]/90 font-normal leading-relaxed">
-                  Isso foi exatamente o que eu vivi. Separei tudo que usei num kit simples, direto ao ponto, sem enrolação.
-                </p>
-              </div>
 
-              <div className="pt-2 sm:pt-4">
-                <button
-                  onClick={scrollToOffer}
-                  type="button"
-                  className="w-full sm:w-auto min-w-[240px] bg-[#E18B42] hover:bg-[#d07a33] active:scale-[0.98] transition-all text-white font-extrabold text-base sm:text-lg py-4 px-8 rounded-2xl shadow-md flex items-center justify-center gap-2 cursor-pointer touch-manipulation"
-                >
-                  <span>Ver o Kit Recomeço</span>
-                  <ChevronDown className="w-5 h-5 animate-bounce shrink-0" />
-                </button>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ========================================================
-            5. OFERTA — "Kit Recomeço" (3 Itens Oficiais)
-            ======================================================== */}
-        <section 
-          ref={offerRef}
-          id="oferta"
-          aria-label="Oferta Kit Recomeço"
-          className="w-full bg-white border border-[#0B343F]/15 rounded-3xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-sm flex flex-col gap-8 scroll-mt-20"
-        >
-          {/* Section Header */}
-          <div className="flex flex-col gap-2 text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#E18B42]">
-              Tudo pronto para você
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0B343F] tracking-tight">
-              Kit Recomeço
-            </h2>
-            <p className="text-sm sm:text-base text-[#0B343F]/80">
-              O caminho prático para destravar sua rotina sem enrolação.
-            </p>
-          </div>
-
-          {/* Desktop 2-Column Grid vs Mobile Stack */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {/* Left Column (Exact Cover Showcase + 3 Official Items List + CTA intermediário) */}
-            <div className="lg:col-span-7 flex flex-col gap-6">
-              
-              {/* Cover Artwork matching user's CAPA KIT 3 */}
-              <KitCoverShowcase />
-
-              {/* 3 Itens do Kit em lista com ícone e nome curto */}
-              <div className="flex flex-col gap-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#0B343F]/60 mb-1">
-                  O que você recebe no kit:
-                </h3>
-
-                {OFFER_ITEMS.map((item) => {
-                  const IconComponent = item.icon;
-                  return (
-                    <div 
-                      key={item.num}
-                      className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#F3ECDF]/40 border border-[#0B343F]/10 hover:border-[#0B343F]/25 transition-colors"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-[#0B343F] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                        <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-[#E18B42]" />
-                      </div>
-
-                      <div className="flex flex-col flex-1 min-w-0">
-                        <span className="text-sm sm:text-base font-bold text-[#0B343F] leading-snug">
-                          {item.num}. {item.title}
-                        </span>
-                        <p className="text-xs sm:text-sm text-[#0B343F]/75 mt-0.5 leading-relaxed">
-                          {item.desc}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Segundo Botão CTA logo após os 3 itens */}
-              <a
-                href={CHECKOUT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full bg-[#E18B42] hover:bg-[#d07a33] active:scale-[0.98] transition-all text-white font-extrabold text-base sm:text-lg py-4 px-6 rounded-2xl shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-center cursor-pointer touch-manipulation no-underline"
-              >
-                <span>Quero meu Kit Recomeço agora</span>
-                <ArrowRight className="w-5 h-5 shrink-0" />
-              </a>
-            </div>
-
-            {/* Right Column (Sticky Pricing Card on Desktop) */}
-            <div className="lg:col-span-5 flex flex-col gap-5 lg:sticky lg:top-20">
-              
-              {/* Preço e Frase de Impacto */}
-              <div className="bg-[#0B343F] text-white rounded-2xl p-6 sm:p-7 text-center flex flex-col gap-3 relative overflow-hidden shadow-md">
-                <span className="inline-block self-center px-3 py-1 rounded-full bg-[#E18B42]/20 text-[#E18B42] text-xs font-bold uppercase tracking-wider">
-                  Condição Especial
-                </span>
-
-                <p className="text-sm sm:text-base font-medium text-[#F3ECDF]">
-                  Tudo isso, por menos que um lanche.
-                </p>
-
-                <div className="flex items-baseline justify-center gap-3 my-1">
-                  <span className="text-sm sm:text-base text-white/50 line-through font-medium">
-                    de R$ 47,00
+                <div className="pt-2 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <span className="text-sm text-white/90 font-medium">
+                    Agora você sabe por onde começar.
                   </span>
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-xs sm:text-sm font-bold text-[#E18B42]">por</span>
-                    <span className="text-4xl sm:text-5xl font-extrabold text-[#E18B42] tracking-tight font-mono tabular-nums">
-                      R$ 9,90
-                    </span>
-                  </div>
-                </div>
-
-                <p className="text-[11px] text-white/60">
-                  valor estimado se vendido separadamente
-                </p>
-              </div>
-
-              {/* Cronômetro de Contagem Regressiva (24h, reinicia ao expirar) */}
-              <div className="flex flex-col items-center justify-center gap-2 bg-[#F3ECDF]/60 border border-[#0B343F]/10 rounded-2xl p-4">
-                <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0B343F]">
-                  <Clock className="w-4 h-4 text-[#E18B42]" />
-                  <span>Oferta por tempo limitado</span>
-                </div>
-
-                {/* Countdown Display */}
-                <div className="flex items-center gap-2 font-mono tabular-nums text-base sm:text-lg font-extrabold text-[#0B343F]">
-                  <div className="bg-white border border-[#0B343F]/15 px-3 py-1.5 rounded-xl min-w-11 text-center shadow-xs">
-                    {pad(timeLeft.hours)}h
-                  </div>
-                  <span className="text-[#0B343F]/40 font-normal">:</span>
-                  <div className="bg-white border border-[#0B343F]/15 px-3 py-1.5 rounded-xl min-w-11 text-center shadow-xs">
-                    {pad(timeLeft.minutes)}m
-                  </div>
-                  <span className="text-[#0B343F]/40 font-normal">:</span>
-                  <div className="bg-white border border-[#0B343F]/15 px-3 py-1.5 rounded-xl min-w-11 text-center text-[#E18B42] shadow-xs">
-                    {pad(timeLeft.seconds)}s
-                  </div>
+                  <button
+                    onClick={scrollToMethod}
+                    type="button"
+                    className="w-full sm:w-auto bg-[#E18B42] hover:bg-[#d07a33] text-white text-xs sm:text-sm font-bold py-2.5 px-4 rounded-xl inline-flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                  >
+                    <span>Ver os 3 passos</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
-
-              {/* Botão CTA Principal Final */}
-              <a
-                href={CHECKOUT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full bg-[#E18B42] hover:bg-[#d07a33] active:scale-[0.98] transition-all text-white font-extrabold text-base sm:text-lg py-4 sm:py-5 px-6 rounded-2xl shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-center cursor-pointer touch-manipulation no-underline"
-              >
-                <span>Quero meu Kit Recomeço agora</span>
-                <ArrowRight className="w-5 h-5 shrink-0" />
-              </a>
-
-              {/* Linha horizontal com ícones genéricos de Pix e Cartão de Crédito */}
-              <div className="flex items-center justify-center gap-3.5 text-[#0B343F] text-xs font-semibold pt-1">
-                <div className="flex items-center gap-1.5">
-                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2.5L3.5 11l8.5 8.5 8.5-8.5L12 2.5z"/>
-                    <path d="M12 7.5L7.5 12l4.5 4.5 4.5-4.5L12 7.5z"/>
-                  </svg>
-                  <span>Pix</span>
-                </div>
-                <span className="text-[#0B343F]/30 select-none" aria-hidden="true">·</span>
-                <div className="flex items-center gap-1.5">
-                  <CreditCard className="w-4 h-4 shrink-0" />
-                  <span>Cartão de Crédito</span>
-                </div>
-              </div>
-
-              {/* Selo de Confiança */}
-              <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-medium text-[#0B343F]/85 text-center px-2 py-1">
-                <Lock className="w-4 h-4 text-[#0B343F] shrink-0" />
-                <span>Compra 100% segura, acesso imediato após confirmação.</span>
-              </div>
-            </div>
-
+            )}
           </div>
         </section>
 
         {/* ========================================================
-            6. RODAPÉ
+            4. APRESENTAR O MÉTODO (UM RECOMEÇO EM 3 PASSOS)
             ======================================================== */}
-        <footer className="w-full text-center py-6 px-4 border-t border-[#0B343F]/10 mt-4">
-          <p className="text-xs sm:text-sm text-[#0B343F]/65 leading-relaxed max-w-lg mx-auto">
-            Kit Recomeço © 2026. Este produto não substitui acompanhamento médico ou nutricional profissional.
+        <section 
+          ref={methodRef} 
+          id="metodo" 
+          className="w-full scroll-mt-20 flex flex-col gap-6"
+        >
+          <div className="text-center max-w-xl mx-auto">
+            <span className="text-xs font-bold tracking-wider text-[#E18B42] uppercase block mb-1">
+              O Método
+            </span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#0B343F] tracking-tight uppercase mb-3">
+              Um Recomeço em 3 Passos
+            </h2>
+            <div className="space-y-1 text-sm sm:text-base text-[#0B343F]/85 leading-relaxed">
+              <p>
+                Você não precisa tentar consertar tudo ao mesmo tempo.
+              </p>
+              <p className="font-medium text-[#0B343F]">
+                O Recomeço organiza os primeiros passos para você sair da inércia e voltar a construir sua rotina.
+              </p>
+            </div>
+          </div>
+
+          {/* Cards dos 3 Passos */}
+          <div className="flex flex-col gap-4">
+            {METHOD_STEPS.map((item) => (
+              <div 
+                key={item.step}
+                className="bg-white border border-[#0B343F]/12 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-11 h-11 rounded-xl bg-[#0B343F] text-[#E18B42] font-black text-base flex items-center justify-center shrink-0">
+                    {item.step}
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-base sm:text-lg font-black text-[#0B343F] tracking-tight uppercase">
+                      {item.name}
+                    </h3>
+                    <p className="text-sm sm:text-base text-[#0B343F]/80 mt-1 leading-snug">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="self-stretch sm:self-auto sm:text-right pt-2 sm:pt-0 border-t sm:border-t-0 border-[#0B343F]/8 shrink-0">
+                  <span className="text-[11px] font-semibold text-[#0B343F]/55 uppercase block">
+                    Material prático:
+                  </span>
+                  <span className="text-xs sm:text-sm font-bold text-[#E18B42]">
+                    “{item.material}”
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Visual dos Materiais como ferramentas práticas do método */}
+          <div className="w-full bg-[#FAF6F0] border border-[#0B343F]/12 rounded-3xl p-5 sm:p-8 flex flex-col items-center gap-4">
+            <span className="text-xs font-bold text-[#0B343F]/70 uppercase tracking-wider text-center">
+              As ferramentas que compõem o método:
+            </span>
+            <div className="w-full max-w-md">
+              <KitCoverShowcase />
+            </div>
+            <p className="text-xs text-[#0B343F]/60 text-center max-w-sm">
+              Materiais objetivos e diretos ao ponto, criados para aplicação prática no dia a dia.
+            </p>
+          </div>
+        </section>
+
+        {/* ========================================================
+            5. O QUE É O RECOMEÇO
+            ======================================================== */}
+        <section className="w-full bg-[#0B343F] text-white rounded-3xl p-7 sm:p-10 shadow-md relative overflow-hidden">
+          <div className="max-w-xl mx-auto flex flex-col gap-4 text-center sm:text-left">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-tight uppercase tracking-tight">
+              Recomeçar não é virar outra pessoa da noite para o dia.
+            </h2>
+            <div className="space-y-1.5 text-base sm:text-lg text-[#F3ECDF]/90 font-normal leading-relaxed pt-1">
+              <p>É voltar a cuidar de você.</p>
+              <p>É recuperar pequenas partes da sua rotina.</p>
+              <p>É fazer hoje aquilo que você vem adiando há semanas.</p>
+            </div>
+            <p className="text-lg sm:text-xl font-bold text-[#E18B42] pt-2">
+              Um passo de cada vez.
+            </p>
+          </div>
+        </section>
+
+        {/* ========================================================
+            6. OFERTA
+            ======================================================== */}
+        <section 
+          ref={offerRef} 
+          id="oferta" 
+          className="w-full scroll-mt-20 bg-white border border-[#0B343F]/15 rounded-3xl p-6 sm:p-8 md:p-10 shadow-sm flex flex-col items-center text-center"
+        >
+          <span className="text-xs font-bold tracking-wider text-[#E18B42] uppercase mb-1">
+            Acesso Imediato
+          </span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#0B343F] tracking-tight uppercase mb-2">
+            Comece Hoje
+          </h2>
+          <p className="text-sm sm:text-base text-[#0B343F]/80 max-w-md mb-6 leading-relaxed">
+            O método Recomeço + os materiais práticos para colocar os primeiros passos em ação.
+          </p>
+
+          {/* Lista de Itens Inclusos */}
+          <div className="w-full max-w-md bg-[#F3ECDF]/40 border border-[#0B343F]/10 rounded-2xl p-5 mb-6 text-left space-y-3">
+            <div className="flex items-center gap-3 text-sm sm:text-base font-bold text-[#0B343F]">
+              <div className="w-5 h-5 rounded-full bg-[#E18B42] text-white flex items-center justify-center shrink-0">
+                <Check className="w-3.5 h-3.5 stroke-[3]" />
+              </div>
+              <span>Método em 3 passos</span>
+            </div>
+            <div className="flex items-center gap-3 text-sm sm:text-base font-bold text-[#0B343F]">
+              <div className="w-5 h-5 rounded-full bg-[#E18B42] text-white flex items-center justify-center shrink-0">
+                <Check className="w-3.5 h-3.5 stroke-[3]" />
+              </div>
+              <span>Guias práticos</span>
+            </div>
+            <div className="flex items-center gap-3 text-sm sm:text-base font-bold text-[#0B343F]">
+              <div className="w-5 h-5 rounded-full bg-[#E18B42] text-white flex items-center justify-center shrink-0">
+                <Check className="w-3.5 h-3.5 stroke-[3]" />
+              </div>
+              <span>Checklist de 21 dias</span>
+            </div>
+            <div className="flex items-center gap-3 text-sm sm:text-base font-bold text-[#0B343F]">
+              <div className="w-5 h-5 rounded-full bg-[#E18B42] text-white flex items-center justify-center shrink-0">
+                <Check className="w-3.5 h-3.5 stroke-[3]" />
+              </div>
+              <span>Acesso digital imediato</span>
+            </div>
+          </div>
+
+          {/* Preço Limpo e Transparente */}
+          <div className="flex flex-col items-center mb-6">
+            <span className="text-xs font-bold text-[#0B343F]/60 uppercase tracking-wider">
+              Investimento único
+            </span>
+            <div className="flex items-baseline gap-1 my-1">
+              <span className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0B343F] tracking-tight font-mono">
+                R$ 9,90
+              </span>
+            </div>
+            <span className="text-xs text-[#0B343F]/65">
+              sem mensalidades • acesso vitalício
+            </span>
+          </div>
+
+          {/* CTA Principal da Oferta */}
+          <a
+            href={CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full max-w-md bg-[#E18B42] hover:bg-[#d07a33] active:scale-[0.98] transition-all text-white font-black text-base sm:text-lg py-4 px-8 rounded-2xl shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer no-underline group"
+          >
+            <span>QUERO COMEÇAR</span>
+            <ArrowRight className="w-5 h-5 shrink-0 transition-transform group-hover:translate-x-1" />
+          </a>
+
+          {/* Formas de Pagamento Aceitas: Pix e Cartão de Crédito */}
+          <div className="flex items-center justify-center gap-3.5 text-[#0B343F] text-xs font-semibold pt-4">
+            <div className="flex items-center gap-1.5">
+              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2.5L3.5 11l8.5 8.5 8.5-8.5L12 2.5z"/>
+                <path d="M12 7.5L7.5 12l4.5 4.5 4.5-4.5L12 7.5z"/>
+              </svg>
+              <span>Pix</span>
+            </div>
+            <span className="text-[#0B343F]/30 select-none" aria-hidden="true">·</span>
+            <div className="flex items-center gap-1.5">
+              <CreditCard className="w-4 h-4 shrink-0" />
+              <span>Cartão de Crédito</span>
+            </div>
+          </div>
+
+          {/* Selo de Segurança */}
+          <div className="flex items-center justify-center gap-1.5 text-xs text-[#0B343F]/75 pt-2">
+            <Lock className="w-3.5 h-3.5 text-[#0B343F]" />
+            <span>Compra 100% segura, acesso imediato após confirmação.</span>
+          </div>
+        </section>
+
+        {/* ========================================================
+            7. PARA QUEM É
+            ======================================================== */}
+        <section className="w-full bg-[#FAF6F0] border border-[#0B343F]/12 rounded-3xl p-6 sm:p-8 md:p-10 shadow-xs">
+          <div className="max-w-xl mx-auto flex flex-col gap-4">
+            <h2 className="text-xl sm:text-2xl font-black text-[#0B343F] tracking-tight uppercase">
+              Feito para quem…
+            </h2>
+            <div className="space-y-3 pt-1">
+              {TARGET_AUDIENCE.map((text, idx) => (
+                <div key={idx} className="flex items-center gap-3 text-sm sm:text-base font-semibold text-[#0B343F]">
+                  <div className="w-5 h-5 rounded-full bg-[#0B343F] text-[#E18B42] flex items-center justify-center shrink-0">
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
+                  </div>
+                  <span>{text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            8. FINAL
+            ======================================================== */}
+        <section className="w-full text-center flex flex-col items-center py-6 sm:py-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#0B343F] tracking-tight uppercase mb-3 max-w-xl text-balance">
+            Você não precisa mudar tudo hoje.
+          </h2>
+          <p className="text-base sm:text-lg text-[#0B343F]/80 leading-relaxed mb-6 max-w-md">
+            Só precisa decidir qual será o seu primeiro passo.
+          </p>
+
+          <a
+            href={CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto min-w-[300px] bg-[#E18B42] hover:bg-[#d07a33] active:scale-[0.98] transition-all text-white font-black text-base sm:text-lg py-4 px-8 rounded-2xl shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer no-underline group"
+          >
+            <span>COMEÇAR MEU RECOMEÇO POR R$ 9,90</span>
+            <ArrowRight className="w-5 h-5 shrink-0 transition-transform group-hover:translate-x-1" />
+          </a>
+
+          <p className="text-xs text-[#0B343F]/65 mt-3">
+            Acesso digital imediato após a confirmação do pagamento.
+          </p>
+        </section>
+
+        {/* Rodapé */}
+        <footer className="w-full text-center py-6 border-t border-[#0B343F]/10">
+          <p className="text-xs text-[#0B343F]/60 max-w-md mx-auto">
+            Kit Recomeço © 2026. Todos os direitos reservados.
           </p>
         </footer>
 
       </main>
+
       <Analytics />
     </div>
   );
