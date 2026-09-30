@@ -7,7 +7,9 @@ import {
   ShieldCheck, 
   ChevronDown, 
   Sparkles,
-  UserCheck
+  UserCheck,
+  Users,
+  SlidersHorizontal
 } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 import { KitCoverShowcase } from './components/KitCoverShowcase';
@@ -39,8 +41,12 @@ const FAQ_ITEMS: FAQItem[] = [
     a: 'Você tem 7 dias de garantia incondicional. Leia o material, comece a aplicar o checklist e, se achar que não valeu a pena, basta solicitar o reembolso. Devolvemos 100% do seu dinheiro sem burocracia.'
   },
   {
-    q: 'Serve para homens e mulheres?',
-    a: 'Sim! A inércia, a falta de constância e o desânimo afetam qualquer pessoa que passou por uma fase difícil. O método foi desenvolvido para qualquer um que queira voltar aos trilhos com simplicidade e sem extremos.'
+    q: 'Serve tanto para homens quanto para mulheres?',
+    a: 'Sim, perfeitamente! O método do Kit Recomeço foi estruturado para atender às necessidades tanto de homens quanto de mulheres que buscam destravar a rotina, ganhar energia, recuperar a autoestima e eliminar o desânimo sem extremismos.'
+  },
+  {
+    q: 'Serve para pessoas mais velhas ou mais novas? Tenho dores ou estou parado há muito tempo.',
+    a: 'Com certeza. O Kit conta com níveis de intensidade adaptáveis: se você é mais velho ou está sedentário, começa no Nível Suave — sem impactos agressivos e focado em devolver mobilidade e fôlego. Se for mais jovem ou já tiver condicionamento, pode avançar para os níveis moderado e avançado respeitando seu próprio ritmo.'
   }
 ];
 
@@ -93,6 +99,12 @@ export default function App() {
           
           {/* Coluna Esquerda: Textos + Bullet points + CTA */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
+            {/* Badge de Adaptabilidade */}
+            <div className="inline-flex items-center gap-2 bg-[#0B343F]/10 border border-[#0B343F]/25 text-[#0B343F] px-3.5 py-1.5 rounded-full text-xs font-bold mb-3 shadow-xs">
+              <Users className="w-3.5 h-3.5 shrink-0" />
+              <span>Para Homens e Mulheres</span>
+            </div>
+
             <div className="mb-4">
               <span className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-[#0A0A0A] uppercase">
                 KIT <span className="text-[#0B343F]">RECOMEÇO</span>
@@ -359,7 +371,108 @@ export default function App() {
                 </div>
                 <div className="flex items-center gap-3 text-sm text-[#0A0A0A] font-semibold">
                   <Check className="w-4 h-4 text-[#0B343F] shrink-0 stroke-[3]" />
+                  <span>Servir tanto para homens quanto para mulheres em qualquer fase</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-[#0A0A0A] font-semibold">
+                  <Check className="w-4 h-4 text-[#0B343F] shrink-0 stroke-[3]" />
                   <span>Criar um resultado que se sustenta no longo prazo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            SEÇÃO DE ADAPTABILIDADE: HOMEM / MULHER & NÍVEIS DE INTENSIDADE
+            ======================================================== */}
+        <section className="w-full bg-[#FFFFFF] border-2 border-[#CBD5E1] rounded-3xl p-6 sm:p-10 shadow-sm flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 bg-[#0B343F]/10 border border-[#0B343F]/25 text-[#0B343F] px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-3">
+            <Users className="w-3.5 h-3.5" />
+            UNIVERSAL E PERSONALIZÁVEL
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#0A0A0A] text-center uppercase tracking-tight mb-3">
+            SERVE TANTO PARA <span className="text-[#0B343F]">HOMENS</span> QUANTO PARA <span className="text-[#0B343F]">MULHERES</span>
+          </h2>
+
+          <p className="text-sm sm:text-base text-[#64748B] text-center max-w-2xl mb-8">
+            Não importa se você tem 20, 45 ou mais de 60 anos. O Kit Recomeço foi estruturado com níveis de intensidade que se moldam exatamente à sua condição física e à sua rotina atual.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+            {/* Card 1: Homens e Mulheres */}
+            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <div className="w-11 h-11 rounded-xl bg-[#0B343F] text-white flex items-center justify-center mb-4 shadow-sm">
+                  <Users className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg sm:text-xl font-black text-[#0A0A0A] mb-2 uppercase">
+                  Para Homens e Mulheres
+                </h3>
+                <p className="text-xs sm:text-sm text-[#475569] leading-relaxed mb-4">
+                  O cansaço crônico, o acúmulo de gordura e o desânimo afetam a todos, mas o corpo feminino e o masculino respondem de formas distintas. O método traz clareza para ambos:
+                </p>
+
+                <div className="space-y-3 text-xs sm:text-sm text-[#1E293B]">
+                  <div className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-[#0B343F] shrink-0 stroke-[3] mt-0.5" />
+                    <span><strong>Para Homens:</strong> ativação do vigor físico, clareza mental, melhora hormonal natural e quebra da inércia com rotinas objetivas.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-[#0B343F] shrink-0 stroke-[3] mt-0.5" />
+                    <span><strong>Para Mulheres:</strong> respeito às oscilações hormonais, redução de inchaço e estresse, com estratégias práticas sem efeito sanfona.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-[#0B343F] shrink-0 stroke-[3] mt-0.5" />
+                    <span>Sem fórmulas prontas ou treinos mirabolantes que não cabem no seu dia a dia.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2: Níveis de Intensidade por Idade */}
+            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <div className="w-11 h-11 rounded-xl bg-[#0B343F] text-white flex items-center justify-center mb-4 shadow-sm">
+                  <SlidersHorizontal className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg sm:text-xl font-black text-[#0A0A0A] mb-2 uppercase">
+                  Níveis de Intensidade Adaptáveis
+                </h3>
+                <p className="text-xs sm:text-sm text-[#475569] leading-relaxed mb-4">
+                  Você não precisa forçar além da conta. O plano oferece três opções de intensidade para pessoas mais novas ou mais velhas:
+                </p>
+
+                <div className="space-y-2.5">
+                  <div className="bg-white border border-[#CBD5E1] rounded-xl p-3 flex items-start gap-3 shadow-xs">
+                    <span className="bg-[#0B343F] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shrink-0 mt-0.5">
+                      Nível 1 • Suave
+                    </span>
+                    <div className="text-xs text-[#334155]">
+                      <strong className="text-[#0A0A0A] block">Pessoas mais velhas, com dores ou sedentárias</strong>
+                      Zero impacto agressivo nas articulações. Movimentos simples e seguros para recuperar mobilidade, postura e respiração sem sobrecarga.
+                    </div>
+                  </div>
+
+                  <div className="bg-white border border-[#CBD5E1] rounded-xl p-3 flex items-start gap-3 shadow-xs">
+                    <span className="bg-[#0B343F]/80 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shrink-0 mt-0.5">
+                      Nível 2 • Moderado
+                    </span>
+                    <div className="text-xs text-[#334155]">
+                      <strong className="text-[#0A0A0A] block">Constância e evolução gradual</strong>
+                      Ideal para quem quer queimar gordura, destravar o metabolismo e criar hábitos sólidos no ritmo certo.
+                    </div>
+                  </div>
+
+                  <div className="bg-white border border-[#CBD5E1] rounded-xl p-3 flex items-start gap-3 shadow-xs">
+                    <span className="bg-[#0B343F]/20 text-[#0B343F] text-[10px] font-black uppercase px-2 py-0.5 rounded shrink-0 mt-0.5">
+                      Nível 3 • Dinâmico
+                    </span>
+                    <div className="text-xs text-[#334155]">
+                      <strong className="text-[#0A0A0A] block">Para os mais jovens ou quem já tem base física</strong>
+                      Estímulos mais acelerados para quem quer intensidade extra e resposta rápida quando o corpo pedir mais.
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
