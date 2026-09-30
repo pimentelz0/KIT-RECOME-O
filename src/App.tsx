@@ -9,7 +9,10 @@ import {
   Sparkles,
   UserCheck,
   Users,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Gift,
+  Dumbbell,
+  Utensils
 } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 import { KitCoverShowcase } from './components/KitCoverShowcase';
@@ -24,6 +27,10 @@ interface FAQItem {
 }
 
 const FAQ_ITEMS: FAQItem[] = [
+  {
+    q: 'O que eu recebo exatamente ao entrar no Kit Recomeço?',
+    a: 'Você recebe o pacote completo com acesso imediato: 1) Guia Principal "Como Sair do Fundo do Poço"; 2) Guia de Acompanhamento "Como Perceber Que Você Está Evoluindo"; 3) O Checklist Prático de 21 Dias; 4) BÔNUS EXCLUSIVO: Treino Recomeço - Parte 2: O Programa Completo; e 5) BÔNUS EXCLUSIVO: Livro Digital Receitas Recomeço. Tudo liberado hoje por apenas R$ 9,90!'
+  },
   {
     q: 'É uma dieta radical ou treino pesado?',
     a: 'Não. O Kit Recomeço não é uma dieta maluca e nem um treino impossível de academia. É um método prático de reconstrução de rotina, mentalidade e micro-hábitos diários para quem está cansado de começar e parar.'
@@ -148,7 +155,7 @@ export default function App() {
               </div>
               <div className="flex items-center gap-2.5 text-xs sm:text-sm text-[#1E293B] font-medium">
                 <Check className="w-4 h-4 text-[#0B343F] shrink-0 stroke-[3]" />
-                <span>Estratégias reais para manter a constância</span>
+                <span><strong>+ 2 Bônus Inclusos:</strong> Treino Recomeço (Parte 2) + Receitas Recomeço</span>
               </div>
             </div>
 
@@ -622,6 +629,102 @@ export default function App() {
 
             </div>
 
+            {/* Bloco de Destaque: 2 SUPER BÔNUS EXCLUSIVOS INCLUSOS HOJE */}
+            <div className="w-full flex flex-col gap-4 mt-3">
+              <div className="flex items-center gap-2 self-center sm:self-start bg-amber-500/10 border border-amber-500/30 text-amber-900 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">
+                <Gift className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>+ 2 SUPER BÔNUS EXCLUSIVOS LIBERADOS HOJE</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                {/* Bônus #1: Treino Recomeço - Parte 2: O Programa Completo */}
+                <div className="bg-gradient-to-b from-[#FFFFFF] to-[#F8FAFC] border-2 border-[#0B343F]/25 rounded-2xl p-6 flex flex-col justify-between shadow-xs relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 bg-[#0B343F] text-white text-[9px] font-black uppercase px-3 py-1 rounded-bl-xl tracking-wider">
+                    BÔNUS #1 • 100% GRÁTIS
+                  </div>
+
+                  <div>
+                    <div className="w-10 h-10 rounded-xl bg-[#0B343F]/10 text-[#0B343F] flex items-center justify-center mb-3">
+                      <Dumbbell className="w-5 h-5" />
+                    </div>
+
+                    <div className="text-xs font-mono text-[#64748B] mb-1">
+                      Valor separado: <span className="line-through">R$ 47,00</span> • <span className="text-[#0B343F] font-bold">Hoje: R$ 0,00</span>
+                    </div>
+
+                    <h4 className="text-base sm:text-lg font-black text-[#0A0A0A] uppercase tracking-tight mb-1.5">
+                      TREINO RECOMEÇO - PARTE 2: O PROGRAMA COMPLETO
+                    </h4>
+                    <p className="text-xs text-[#475569] mb-4 leading-relaxed">
+                      O programa completo de exercícios práticos para fazer em casa ou onde quiser. Projetado para destravar seu corpo, acelerar o metabolismo e queimar gordura sem exigir aparelhos caros.
+                    </p>
+
+                    <div className="space-y-2 pt-2 border-t border-[#E2E8F0]">
+                      <div className="flex items-center gap-2 text-xs text-[#334155] font-medium">
+                        <Check className="w-3.5 h-3.5 text-[#0B343F] shrink-0 stroke-[3]" />
+                        <span>Treinos objetivos de 15 a 25 minutos por dia</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-[#334155] font-medium">
+                        <Check className="w-3.5 h-3.5 text-[#0B343F] shrink-0 stroke-[3]" />
+                        <span>Pode ser feito em casa com o peso do próprio corpo</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-[#334155] font-medium">
+                        <Check className="w-3.5 h-3.5 text-[#0B343F] shrink-0 stroke-[3]" />
+                        <span>Adaptado com níveis Suave, Moderado e Dinâmico</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-[#334155] font-medium">
+                        <Check className="w-3.5 h-3.5 text-[#0B343F] shrink-0 stroke-[3]" />
+                        <span>Focado em tonificar, recuperar fôlego e queimar calorias</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bônus #2: Receitas Recomeço */}
+                <div className="bg-gradient-to-b from-[#FFFFFF] to-[#F8FAFC] border-2 border-[#0B343F]/25 rounded-2xl p-6 flex flex-col justify-between shadow-xs relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 bg-[#0B343F] text-white text-[9px] font-black uppercase px-3 py-1 rounded-bl-xl tracking-wider">
+                    BÔNUS #2 • 100% GRÁTIS
+                  </div>
+
+                  <div>
+                    <div className="w-10 h-10 rounded-xl bg-[#0B343F]/10 text-[#0B343F] flex items-center justify-center mb-3">
+                      <Utensils className="w-5 h-5" />
+                    </div>
+
+                    <div className="text-xs font-mono text-[#64748B] mb-1">
+                      Valor separado: <span className="line-through">R$ 37,00</span> • <span className="text-[#0B343F] font-bold">Hoje: R$ 0,00</span>
+                    </div>
+
+                    <h4 className="text-base sm:text-lg font-black text-[#0A0A0A] uppercase tracking-tight mb-1.5">
+                      RECEITAS RECOMEÇO
+                    </h4>
+                    <p className="text-xs text-[#475569] mb-4 leading-relaxed">
+                      Um guia de receitas deliciosas, fáceis e econômicas preparadas com ingredientes comuns de supermercado para você comer bem, desinchar e emagrecer sem passar fome.
+                    </p>
+
+                    <div className="space-y-2 pt-2 border-t border-[#E2E8F0]">
+                      <div className="flex items-center gap-2 text-xs text-[#334155] font-medium">
+                        <Check className="w-3.5 h-3.5 text-[#0B343F] shrink-0 stroke-[3]" />
+                        <span>Alimentos normais e acessíveis que você já tem em casa</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-[#334155] font-medium">
+                        <Check className="w-3.5 h-3.5 text-[#0B343F] shrink-0 stroke-[3]" />
+                        <span>Preparo rápido e descomplicado para o dia a dia</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-[#334155] font-medium">
+                        <Check className="w-3.5 h-3.5 text-[#0B343F] shrink-0 stroke-[3]" />
+                        <span>Pratos que trazem saciedade prolongada e diminuem a ansiedade</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-[#334155] font-medium">
+                        <Check className="w-3.5 h-3.5 text-[#0B343F] shrink-0 stroke-[3]" />
+                        <span>Sem dietas restritivas malucas ou receitas mirabolantes</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
 
@@ -635,28 +738,36 @@ export default function App() {
 
           <div className="space-y-3 text-xs sm:text-sm border-b border-[#E2E8F0] pb-5 mb-5">
             <div className="flex items-center justify-between text-[#334155]">
-              <span>Como Sair do Fundo do Poço</span>
+              <span>1. Como Sair do Fundo do Poço (Guia Principal)</span>
               <span className="font-mono font-bold">R$ 47</span>
             </div>
             <div className="flex items-center justify-between text-[#334155]">
-              <span>Como Perceber Que Você Está Evoluindo</span>
+              <span>2. Como Perceber Que Você Está Evoluindo</span>
               <span className="font-mono font-bold">R$ 27</span>
             </div>
             <div className="flex items-center justify-between text-[#334155]">
-              <span>Checklist de 21 Dias</span>
+              <span>3. Checklist Prático de 21 Dias</span>
               <span className="font-mono font-bold">R$ 17</span>
+            </div>
+            <div className="flex items-center justify-between text-[#334155]">
+              <span>4. BÔNUS: Treino Recomeço - O Programa Completo</span>
+              <span className="font-mono font-bold">R$ 47</span>
+            </div>
+            <div className="flex items-center justify-between text-[#334155]">
+              <span>5. BÔNUS: Livro Digital Receitas Recomeço</span>
+              <span className="font-mono font-bold">R$ 37</span>
             </div>
           </div>
 
           <div className="flex items-center justify-between text-base sm:text-lg font-black mb-5">
-            <span className="text-[#64748B]">Valor total:</span>
+            <span className="text-[#64748B]">Valor total acumulado:</span>
             <span className="text-[#0B343F] line-through font-mono text-xl sm:text-2xl">
-              R$ 91
+              R$ 175
             </span>
           </div>
 
           <div className="w-full bg-[#0B343F] text-white py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider">
-            Mas hoje você não paga isso.
+            Mas hoje você leva o Kit completo + os 2 bônus por apenas R$ 9,90.
           </div>
         </section>
 
@@ -716,11 +827,11 @@ export default function App() {
           </div>
 
           <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tight mb-2">
-            KIT RECOMEÇO + TODOS OS MATERIAIS
+            KIT RECOMEÇO + CHECKLIST + 2 SUPER BÔNUS
           </h3>
 
           <div className="text-xs sm:text-sm text-white/60 line-through font-mono mt-1 mb-1">
-            De: R$ 91,00
+            De: R$ 175,00
           </div>
 
           <span className="text-xs sm:text-sm text-white/80 font-medium">
@@ -736,7 +847,7 @@ export default function App() {
           </div>
 
           <p className="text-xs text-white/70 mb-6 font-medium">
-            Pagamento único. Acesso imediato.
+            Pagamento único. Acesso imediato a todos os 5 materiais.
           </p>
 
           {/* CTA Principal de Compra */}
