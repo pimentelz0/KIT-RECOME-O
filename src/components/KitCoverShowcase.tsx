@@ -6,9 +6,6 @@ export function KitCoverShowcase() {
       {/* Studio Stage */}
       <div className="relative w-full overflow-hidden bg-gradient-to-b from-[#F8FAFC] via-[#F1F5F9] to-[#E2E8F0] p-3 sm:p-5">
         
-        {/* Soft Petroleum Ambient Glow */}
-        <div className="absolute inset-0 bg-[#0B343F]/5 blur-2xl pointer-events-none" />
-
         {/* 3 Guide Covers in a 100% Perfectly Leveled Grid */}
         <div className="relative z-10 w-full grid grid-cols-3 gap-2 sm:gap-3 items-stretch">
           

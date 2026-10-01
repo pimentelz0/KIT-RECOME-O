@@ -67,16 +67,19 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#FFFFFF] text-[#0A0A0A] font-sans antialiased selection:bg-[#0B343F] selection:text-white flex flex-col">
       
-      {/* Top Value Banner em Verde Petróleo */}
-      <div className="w-full bg-[#0B343F] text-white py-2 px-4 text-center">
-        <p className="text-xs sm:text-sm font-medium flex items-center justify-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+      {/* Top Value Banner - Clean, Light & High Conversion */}
+      <div className="w-full bg-[#F8FAFC] border-b border-[#E2E8F0] text-[#0B343F] py-2 px-4 text-center">
+        <p className="text-xs sm:text-sm font-semibold flex items-center justify-center gap-2">
+          <span className="inline-flex items-center gap-1.5 bg-[#0B343F] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            OFERTA
+          </span>
           <span>Acesso Imediato Após a Compra · <strong>Apenas R$ 9,90</strong></span>
         </p>
       </div>
 
-      {/* Header Sticky com Fundo Branco & Detalhes em Verde Petróleo */}
-      <header className="w-full sticky top-0 z-50 bg-[#FFFFFF]/95 backdrop-blur-md border-b border-[#E2E8F0] py-3.5 px-4 sm:px-6 lg:px-8">
+      {/* Header Sticky com Fundo Branco Sólido */}
+      <header className="w-full sticky top-0 z-50 bg-[#FFFFFF] border-b border-[#E2E8F0] py-3 px-4 sm:px-6 lg:px-8 shadow-xs">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
           <a href="#hero" className="flex items-center gap-2 group select-none no-underline">
             <span className="text-lg sm:text-xl font-black tracking-tight text-[#0A0A0A] uppercase">
@@ -275,7 +278,7 @@ export default function App() {
                 {/* ANTES */}
                 <div className="flex flex-col rounded-xl overflow-hidden bg-[#F1F5F9] border border-[#CBD5E1] relative aspect-[3/4] group">
                   {/* Badge ANTES */}
-                  <div className="absolute top-2.5 left-2.5 z-10 bg-black/80 backdrop-blur-xs text-white px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shadow-md">
+                  <div className="absolute top-2.5 left-2.5 z-10 bg-black/85 text-white px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shadow-md">
                     ANTES
                   </div>
                   
