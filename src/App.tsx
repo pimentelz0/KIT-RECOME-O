@@ -29,7 +29,7 @@ interface FAQItem {
 const FAQ_ITEMS: FAQItem[] = [
   {
     q: 'O que eu recebo exatamente ao entrar no Kit Recomeço?',
-    a: 'Você recebe o pacote completo com acesso imediato: 1) Guia Principal "Como Sair do Fundo do Poço"; 2) Guia de Acompanhamento "Como Perceber Que Você Está Evoluindo"; 3) O Checklist Prático de 21 Dias; 4) BÔNUS EXCLUSIVO: Treino Recomeço - Parte 2: O Programa Completo; e 5) BÔNUS EXCLUSIVO: Livro Digital Receitas Recomeço. Tudo liberado hoje por apenas R$ 9,90!'
+    a: 'Você recebe o pacote completo com acesso imediato: 1) Guia Principal "Como Sair do Fundo do Poço"; 2) Guia de Acompanhamento "Como Perceber Que Você Está Evoluindo"; 3) O Checklist Prático de 21 Dias; 4) BÔNUS EXCLUSIVO: Treino Recomeço - Parte 2: O Programa Completo; e 5) BÔNUS EXCLUSIVO: Livro Digital Receitas Recomeço. Tudo liberado hoje por apenas R$ 19,90!'
   },
   {
     q: 'É uma dieta radical ou treino pesado?',
@@ -74,7 +74,7 @@ export default function App() {
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             OFERTA
           </span>
-          <span>Acesso Imediato Após a Compra · <strong>Apenas R$ 9,90</strong></span>
+          <span>Acesso Imediato Após a Compra · <strong>Apenas R$ 19,90</strong></span>
         </p>
       </div>
 
@@ -770,7 +770,7 @@ export default function App() {
           </div>
 
           <div className="w-full bg-[#0B343F] text-white py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider">
-            Mas hoje você leva o Kit completo + os 2 bônus por apenas R$ 9,90.
+            Mas hoje você leva o Kit completo + os 2 bônus por apenas R$ 19,90.
           </div>
         </section>
 
@@ -841,11 +841,11 @@ export default function App() {
             Por apenas:
           </span>
 
-          {/* Preço Gigante R$ 9,90 */}
+          {/* Preço Gigante R$ 19,90 */}
           <div className="flex items-baseline justify-center gap-1 my-2">
             <span className="text-2xl sm:text-3xl font-black text-white">R$</span>
             <span className="text-6xl sm:text-7xl font-black text-white tracking-tighter font-mono tabular-nums">
-              9,90
+              19,90
             </span>
           </div>
 
