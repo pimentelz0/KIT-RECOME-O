@@ -274,35 +274,43 @@ export default function App() {
           <div className="lg:col-span-5 flex flex-col items-center w-full">
             <div className="w-full bg-[#FFFFFF] border border-[#CBD5E1] rounded-2xl p-3 sm:p-4 shadow-md">
               
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {/* ANTES */}
-                <div className="flex flex-col rounded-xl overflow-hidden bg-[#F1F5F9] border border-[#CBD5E1] relative aspect-[3/4] group">
-                  {/* Badge ANTES */}
-                  <div className="absolute top-2.5 left-2.5 z-10 bg-black/85 text-white px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shadow-md">
-                    ANTES
+                <div className="flex flex-col rounded-2xl overflow-hidden bg-white border border-[#CBD5E1] shadow-sm group">
+                  {/* Etiqueta Superior Fora da Foto */}
+                  <div className="bg-[#E2E8F0] py-2 px-3 text-center border-b border-[#CBD5E1]">
+                    <span className="text-[11px] sm:text-xs font-black tracking-wider text-[#334155] uppercase block">
+                      ANTES
+                    </span>
                   </div>
                   
-                  <img
-                    src={pauloAntesImg}
-                    alt="Foto original do Paulo antes do Kit Recomeço"
-                    className="w-full h-full object-cover object-center grayscale brightness-95 transition-transform duration-300 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                  />
+                  <div className="relative aspect-[3/4] overflow-hidden bg-[#F1F5F9]">
+                    <img
+                      src={pauloAntesImg}
+                      alt="Foto original do Paulo antes do Kit Recomeço"
+                      className="w-full h-full object-cover object-center grayscale brightness-95 transition-transform duration-300 group-hover:scale-105"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
                 </div>
 
                 {/* DEPOIS */}
-                <div className="flex flex-col rounded-xl overflow-hidden bg-[#F1F5F9] border-2 border-[#0B343F] relative aspect-[3/4] group ring-2 ring-[#0B343F]/20">
-                  {/* Badge DEPOIS em Verde Petróleo */}
-                  <div className="absolute top-2.5 left-2.5 z-10 bg-[#0B343F] text-white px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider shadow-md">
-                    DEPOIS
+                <div className="flex flex-col rounded-2xl overflow-hidden bg-white border-2 border-[#0B343F] shadow-md ring-2 ring-[#0B343F]/20 group">
+                  {/* Etiqueta Superior Fora da Foto */}
+                  <div className="bg-[#0B343F] py-2 px-3 text-center border-b border-[#0B343F]">
+                    <span className="text-[11px] sm:text-xs font-black tracking-wider text-white uppercase block">
+                      DEPOIS
+                    </span>
                   </div>
 
-                  <img
-                    src={pauloDepoisImg}
-                    alt="Foto original do Paulo depois do Kit Recomeço"
-                    className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                  />
+                  <div className="relative aspect-[3/4] overflow-hidden bg-[#F1F5F9]">
+                    <img
+                      src={pauloDepoisImg}
+                      alt="Foto original do Paulo depois do Kit Recomeço"
+                      className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -504,22 +512,69 @@ export default function App() {
             
             {/* Card Principal: KIT RECOMEÇO */}
             <div className="w-full bg-[#FFFFFF] border-2 border-[#0B343F]/30 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row gap-6 md:gap-8 items-center relative overflow-hidden shadow-sm">
-              <div className="w-full md:w-5/12 flex items-center justify-center">
-                <div className="w-full max-w-[260px] aspect-[1/1.3] rounded-2xl bg-gradient-to-b from-[#0F172A] to-[#0B343F] border border-white/20 p-4 flex flex-col justify-between shadow-xl relative text-white">
-                  <div className="text-center">
-                    <span className="text-[10px] font-black tracking-widest text-[#E2E8F0] uppercase">
-                      PRODUTO PRINCIPAL
+              <div className="w-full md:w-5/12 flex flex-col items-center justify-center">
+                {/* 3D Hardcover Book Mockup */}
+                <div className="relative w-full max-w-[270px] aspect-[1/1.38] rounded-r-2xl rounded-l-xs bg-gradient-to-br from-[#0F172A] via-[#0B343F] to-[#07242C] p-5 flex flex-col justify-between text-white border-r-[6px] border-r-slate-200 border-b-[4px] border-b-slate-300 shadow-[8px_16px_32px_rgba(11,52,63,0.35)] ring-2 ring-[#0B343F]/30 overflow-hidden group select-none">
+                  
+                  {/* 3D Book Spine Effect (Left Edge) */}
+                  <div className="w-3.5 absolute left-0 inset-y-0 bg-gradient-to-r from-black/65 via-white/15 to-black/30 z-20 pointer-events-none shadow-inner" />
+                  <div className="w-px absolute left-3.5 inset-y-0 bg-white/20 z-20 pointer-events-none" />
+
+                  {/* Glossy Diagonal Reflection */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-10" />
+
+                  {/* Inner Hardcover Decorative Border */}
+                  <div className="absolute inset-2 border border-white/20 rounded-r-xl pointer-events-none z-10" />
+
+                  {/* Top Embossed Seal */}
+                  <div className="relative z-20 flex items-center justify-between pl-3 pr-1 pt-1">
+                    <span className="bg-amber-400/90 text-slate-950 font-black text-[8px] tracking-wider uppercase px-2 py-0.5 rounded shadow-xs">
+                      ★ LIVRO PRINCIPAL
+                    </span>
+                    <span className="text-[8px] font-mono text-white/60">
+                      VOL. 1
                     </span>
                   </div>
-                  <div className="text-center my-2">
-                    <span className="text-4xl sm:text-5xl font-black text-white">1</span>
-                    <h3 className="text-sm sm:text-base font-black text-white mt-1 uppercase">
+
+                  {/* Center Emblem: Number 1 & Steps Icon */}
+                  <div className="relative z-20 flex flex-col items-center justify-center my-2 pl-3">
+                    <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-white/10 border border-white/30 flex flex-col items-center justify-center shadow-inner mb-2">
+                      <span className="text-3xl font-black text-white leading-none">
+                        1
+                      </span>
+                      <svg className="w-3.5 h-3.5 text-amber-300 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 20h4v-4h4v-4h4V8" />
+                        <path d="M16 4v4l4-2-4-2z" fill="#FCD34D" />
+                      </svg>
+                    </div>
+
+                    <h3 className="text-sm sm:text-base font-black text-white uppercase tracking-tight text-center leading-snug drop-shadow-sm px-1">
                       Como Sair do Fundo do Poço
                     </h3>
                   </div>
-                  <p className="text-[10px] text-[#CBD5E1] text-center">
-                    O passo a passo que usei pra recomeçar do zero
-                  </p>
+
+                  {/* Gold/White Divider */}
+                  <div className="relative z-20 w-12 h-0.5 bg-gradient-to-r from-transparent via-amber-300 to-transparent rounded-full mx-auto my-1 pl-3 shrink-0" />
+
+                  {/* Footer Publisher Seal */}
+                  <div className="relative z-20 text-center pl-3 pb-1">
+                    <p className="text-[8.5px] text-[#CBD5E1] leading-tight font-medium mb-1 line-clamp-2">
+                      O passo a passo prático para sair da inércia e recomeçar
+                    </p>
+                    <span className="text-[6.5px] font-bold tracking-widest text-white/50 uppercase block">
+                      MÉTODO RECOMEÇO • PAULO PIMENTEL
+                    </span>
+                  </div>
+                </div>
+
+                {/* Format Badges Under Mockup */}
+                <div className="flex items-center justify-center gap-2 mt-3 text-[10px] text-[#475569] font-medium">
+                  <span className="bg-[#F1F5F9] border border-[#CBD5E1] px-2.5 py-0.5 rounded-full text-[9px] text-[#1E293B] font-semibold">
+                    📖 Formato PDF
+                  </span>
+                  <span className="bg-[#F1F5F9] border border-[#CBD5E1] px-2.5 py-0.5 rounded-full text-[9px] text-[#1E293B] font-semibold">
+                    ⚡ Acesso Imediato
+                  </span>
                 </div>
               </div>
 
